@@ -3,7 +3,7 @@
 // mongoose models
 const { Client, Project } = require('../models/index');
 
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList } = require("graphql");
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList, GraphQLNonNull } = require("graphql");
 
 // ClientType Defenitation
 const ClientType = new GraphQLObjectType({
@@ -77,9 +77,53 @@ const RootQuery = new GraphQLObjectType({
     }
 });
 
+const mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        addClient: {
+            type: ClientType,
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString) },
+                email: { type: GraphQLNonNull(GraphQLString) },
+                phone: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(parent, args) {
+                let { name, email, phone } = args;
+                const client = new Client({ name, email, phone });
+                return await client.save();
+            }
+        },
+        deleteClient: {
+            type: ClientType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            async resolve(parent, args) {
+                return await Client.findByIdAndDelete(args.id);
+            }
+        },
+
+        updateClient: {
+            type: ClientType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+                name: { type: GraphQLString },
+                email: { type: GraphQLString },
+                phone: { type: GraphQLString }
+            },
+            async resolve(parent, args) {
+                let { id: _id, name = '', email = '', phone = '' } = args;
+                return await Client.findOneAndUpdate({ _id }, { $set: { name, email, phone } })
+            }
+        }
+    }
+})
+
 
 
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation
+
 })
