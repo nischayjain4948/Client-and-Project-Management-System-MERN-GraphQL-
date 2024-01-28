@@ -6,6 +6,13 @@ const { graphqlHTTP } = require("express-graphql");
 const { graphql } = require("graphql");
 const colors = require("colors");
 
+// Cross origin Resource cors
+
+const cors = require("cors");
+
+app.use(cors());
+
+
 const schema = require("./schema/schema");
 
 
