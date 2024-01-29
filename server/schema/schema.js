@@ -27,7 +27,7 @@ const ProjectType = new GraphQLObjectType({
         client: {
             type: ClientType,
             async resolve(parent, args) {
-                return Client.findById(parent.clientId)
+                return await Client.findById(parent.clientId)
             }
         }
 

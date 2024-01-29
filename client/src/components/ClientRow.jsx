@@ -5,6 +5,11 @@ import { DELETE_ClIENT } from "../mutations/clientMutations";
 import { GET_CLIENTS } from "../queries/clientQuery";
 
 const ClientRow = ({ client }) => {
+  const deleteClientOnButton = () => {
+    const clicked = confirm("Do you want to delete");
+    if (clicked) deleteClient();
+  };
+
   const [deleteClient] = useMutation(DELETE_ClIENT, {
     variables: { id: client.id },
     update(cache, { data: { deleteClient } }) {
@@ -25,7 +30,10 @@ const ClientRow = ({ client }) => {
       <td>{client.phone}</td>
       <td>{client.id}</td>
       <td>
-        <button className="btn btn-danger btn-sm" onClick={deleteClient}>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={deleteClientOnButton}
+        >
           <FaTrash />
         </button>
       </td>
