@@ -83,7 +83,6 @@ const mutation = new GraphQLObjectType({
     fields: {
 
         // client Mutations
-
         addClient: {
             type: ClientType,
             args: {

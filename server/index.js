@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000;
 const { graphqlHTTP } = require("express-graphql");
 const { graphql } = require("graphql");
 const colors = require("colors");
+const passport = require("./auth/passport");
 
 // Cross origin Resource cors
 
@@ -21,7 +22,7 @@ require('./config/db')();
 
 
 
-
+app.use(passport.initialize());
 
 app.use('/graphql', graphqlHTTP({
     schema,
