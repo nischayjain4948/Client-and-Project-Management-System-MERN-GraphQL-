@@ -8,12 +8,12 @@ const User = require("../models/User")
 
 const jwtOptions = {
     jwtFromRequest: Extractjwt.fromAuthHeaderAsBearerToken(),
-    secretorKey: JWT_SECRET
+    secretOrKey: JWT_SECRET
 };
 
 const strategy = new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
     try {
-        const user = User.findOne({ _id: jwt_payload.userId }).lean();
+        const user = await User.findOne({ _id: jwt_payload.userId }).lean();
         if (user) {
             return done(null, user);
         }
